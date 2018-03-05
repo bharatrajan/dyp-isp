@@ -4,110 +4,136 @@ import SingleRecord from '../SingleRecord/SingleRecord'
 import {getCustomerRankList} from '../../api/api'
 
 class CustomerTable extends Component {
+
+  /**
+  * @description - Set props to parent
+  * @description - Binds "this" inside "errorHandler" & "successHandler"
+  * @constructor
+  * @param {object} props - attributes sent from parent
+  * @returns none
+  */  
   constructor(props) {
     super(props);
     this.errorHandler = this.errorHandler.bind(this);
     this.successHandler = this.successHandler.bind(this);
   }
 
-  state = {
-    rankList : [
-      {
-        "percentage": 1000, 
-        "label": "Savvis", 
-        "change": 0, 
-        "rank": 1, 
-        "asn": 3561
-      }, 
-      {
-        "percentage": 877, 
-        "label": "nLayer Communications, Inc.", 
-        "change": 0, 
-        "rank": 2, 
-        "asn": 4436
-      }, 
-      {
-        "percentage": 855, 
-        "label": "Tata Communications", 
-        "change": 0, 
-        "rank": 3, 
-        "asn": 6453
-      }, 
-      {
-        "percentage": 729, 
-        "label": "Tinet SpA", 
-        "change": 0, 
-        "rank": 4, 
-        "asn": 3257
-      }, 
-      {
-        "percentage": 606, 
-        "label": "XO Communications", 
-        "change": 0, 
-        "rank": 5, 
-        "asn": 2828
-      }, 
-      {
-        "percentage": 571, 
-        "label": "Qwest Communications Company, LLC", 
-        "change": 0, 
-        "rank": 6, 
-        "asn": 209
-      }, 
-      {
-        "percentage": 497, 
-        "label": "Road Runner HoldCo LLC", 
-        "change": 0, 
-        "rank": 7, 
-        "asn": 7843
-      }, 
-      {
-        "percentage": 476, 
-        "label": "Road Runner HoldCo LLC", 
-        "change": 0, 
-        "rank": 8, 
-        "asn": 11351
-      }, 
-      {
-        "percentage": 469, 
-        "label": "BHARTI Airtel Ltd.", 
-        "change": 0, 
-        "rank": 9, 
-        "asn": 9498
-      }, 
-      {
-        "percentage": 383, 
-        "label": "Hurricane Electric, Inc.", 
-        "change": 0, 
-        "rank": 10, 
-        "asn": 6939
+  /**
+  * @description: Lables used inside this component
+  */    
+  labels = {
+    table : {
+      header : {
+        main : "IPv4 Customer Base Rankings",
+        rank : "",
+        label : "Provider",
+        asn : "ASN",
+        percentage: ""
       }
-    ]
+    }
+  }
+
+  /**
+  * @description: Component state
+  */   
+  state = {
   }
   
+  /**
+  * @description Make get API call during post mount
+  * @type : lifecycle
+  * @returns none
+  */  
   componentDidMount = () => {
-    /*
     getCustomerRankList()
       .then(this.successHandler)
       .catch(this.errorHandler)
-    */
   }; 
 
+  /**
+  * @description - Takes rankList, validates and set to state
+  * @handler
+  * @param {object} rankList - response from API
+  * @returns none
+  */  
   successHandler = rankList => {
-    this.setState({ rankList : rankList })
+    if(Array.isArray(rankList) && rankList.length > 0){
+      this.setState({ rankList : rankList })
+    }else{
+      this.setState({ apiError : rankList })
+    }
   }
 
-  errorHandler = error => {
-    this.setState({ error : error })
+  /**
+  * @description - Takes error and set to state
+  * @handler
+  * @param {object} apiError - error from API
+  * @returns none
+  */    
+  errorHandler = apiError => {
+    this.setState({ apiError : apiError })
   }    
 
+  /**
+  * @description: Template renderer
+  * @param: None
+  * @returns: None
+  */  
   render() {
-    const { rankList, error } = this.state;
-    return (
-      <div className="CustomerTable">
-        
-      </div>
-    );
+    const { rankList, apiError } = this.state;
+    
+    if(typeof apiError == 'undefined' && typeof rankList == 'undefined'){
+      return (
+        <div className="CustomerTable">
+        </div>
+      )
+    }
+    
+
+    else if(typeof apiError != 'undefined'){
+      return(
+        <div className="CustomerTable">        
+          <div className="error-message alert alert-danger">
+            {`! Something went wrong. Please try again later for ${this.labels.table.header.main}`}
+          </div>        
+        </div>  
+      )
+    }
+
+
+    else if(typeof rankList != 'undefined' && Array.isArray(rankList) && rankList.length>0){
+      return(
+        <div className="CustomerTable">                
+          <div className="table-shell">
+            <div className="table-title">{this.labels.table.header.main}</div>
+            <div className="table">
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>{this.labels.table.header.label}</th>
+                    <th>{this.labels.table.header.asn}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {rankList.map((record, index) => 
+                        <SingleRecord key={index + record.rank} record={record}/>
+                    )}
+                </tbody>
+              </table>          
+            </div>
+          </div>          
+        </div>          
+      )      
+    }
+    
+    else{
+      return (
+        <div className="CustomerTable">
+        </div>
+      )
+    }
   }
 }
 

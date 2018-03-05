@@ -14,7 +14,8 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "cache-control, Accept");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
   next();
 });
 

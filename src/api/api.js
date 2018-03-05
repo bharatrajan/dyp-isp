@@ -1,5 +1,5 @@
 //Dev API path to mock JSON
-const mockPath = "/mocks"
+const mockPath = "http://localhost:3030/mocks"
 
 //Production API path
 const apiPath = ""
@@ -7,6 +7,7 @@ const apiPath = ""
 
 const headers = {
   'Accept': 'application/json',
+  'cache-control': 'no-cache',
 }
 
 const isDevEnv = (window.location.hostname.indexOf("localhost") === 0
@@ -36,11 +37,8 @@ if(isDevEnv){
 
 
 export const getCustomerRankList = () =>
-  fetch(fullAPIpath.customer, { headers })
-    .then(function(res){
-      console.log("res : ", res)
-      return res
-    })
+  fetch(fullAPIpath.customer, {headers})
+    .then(res => res.json)
     .then(data => data.books)
     .catch(error => error)    
     
