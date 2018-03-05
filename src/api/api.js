@@ -1,12 +1,12 @@
 //Dev API path to mock JSON
-const mockPath = "/api/mocks"
+const mockPath = "/mocks"
 
 //Production API path
 const apiPath = ""
 
 
 const headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
 }
 
 const isDevEnv = (window.location.hostname.indexOf("localhost") === 0
@@ -32,19 +32,33 @@ if(isDevEnv){
     retail : "",
     wholesale : ""
   }  
-}                  
+}           
 
-export const getBackboneRankList = () =>
-  fetch(fullAPIpath.backbone, { headers })
-    .then(res => res.json())
-    .then(data => data.list)
-    .catch(error => error)  
-    
+
 export const getCustomerRankList = () =>
   fetch(fullAPIpath.customer, { headers })
+    .then(function(res){
+      console.log("res : ", res)
+      return res
+    })
+    .then(data => data.books)
+    .catch(error => error)    
+    
+
+export const getBackboneRankList = () =>
+    fetch(fullAPIpath.backbone, {
+      cache: 'no-cache', 
+      headers,
+    })
     .then(res => res.json())
     .then(data => data.list)
     .catch(error => error)  
+
+export const getCustomerRankList1 = () =>
+  fetch(fullAPIpath.customer, headers)
+  .then(res => res.json())
+  .then(data => data.list)
+  .catch(error => error)  
   
 export const getGrowthRankList = () =>
   fetch(fullAPIpath.growth, { headers })

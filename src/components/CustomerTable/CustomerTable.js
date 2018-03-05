@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './CustomerTable.css';
 import SingleRecord from '../SingleRecord/SingleRecord'
-import getCustomerRankList from '../../api/api'
+import {getCustomerRankList} from '../../api/api'
 
 class CustomerTable extends Component {
   constructor(props) {
@@ -9,14 +9,91 @@ class CustomerTable extends Component {
     this.errorHandler = this.errorHandler.bind(this);
     this.successHandler = this.successHandler.bind(this);
   }
+
+  state = {
+    rankList : [
+      {
+        "percentage": 1000, 
+        "label": "Savvis", 
+        "change": 0, 
+        "rank": 1, 
+        "asn": 3561
+      }, 
+      {
+        "percentage": 877, 
+        "label": "nLayer Communications, Inc.", 
+        "change": 0, 
+        "rank": 2, 
+        "asn": 4436
+      }, 
+      {
+        "percentage": 855, 
+        "label": "Tata Communications", 
+        "change": 0, 
+        "rank": 3, 
+        "asn": 6453
+      }, 
+      {
+        "percentage": 729, 
+        "label": "Tinet SpA", 
+        "change": 0, 
+        "rank": 4, 
+        "asn": 3257
+      }, 
+      {
+        "percentage": 606, 
+        "label": "XO Communications", 
+        "change": 0, 
+        "rank": 5, 
+        "asn": 2828
+      }, 
+      {
+        "percentage": 571, 
+        "label": "Qwest Communications Company, LLC", 
+        "change": 0, 
+        "rank": 6, 
+        "asn": 209
+      }, 
+      {
+        "percentage": 497, 
+        "label": "Road Runner HoldCo LLC", 
+        "change": 0, 
+        "rank": 7, 
+        "asn": 7843
+      }, 
+      {
+        "percentage": 476, 
+        "label": "Road Runner HoldCo LLC", 
+        "change": 0, 
+        "rank": 8, 
+        "asn": 11351
+      }, 
+      {
+        "percentage": 469, 
+        "label": "BHARTI Airtel Ltd.", 
+        "change": 0, 
+        "rank": 9, 
+        "asn": 9498
+      }, 
+      {
+        "percentage": 383, 
+        "label": "Hurricane Electric, Inc.", 
+        "change": 0, 
+        "rank": 10, 
+        "asn": 6939
+      }
+    ]
+  }
   
   componentDidMount = () => {
+    /*
     getCustomerRankList()
       .then(this.successHandler)
       .catch(this.errorHandler)
+    */
   }; 
 
-  successHandler = data => {
+  successHandler = rankList => {
     this.setState({ rankList : rankList })
   }
 
@@ -25,10 +102,10 @@ class CustomerTable extends Component {
   }    
 
   render() {
-    //const { rankList, error } = this.state;
+    const { rankList, error } = this.state;
     return (
       <div className="CustomerTable">
-
+        
       </div>
     );
   }
